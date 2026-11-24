@@ -1,0 +1,113 @@
+@baseUrl = http://localhost:8000
+@contentType = application/json
+
+# Después de `migrate:fresh --seed` los libros tienen ids 1..15.
+# El primer libro creado con este archivo recibe el id 16.
+@bookId = 16
+
+### Health check
+GET {{baseUrl}}/up
+
+### Listar todos los libros
+GET {{baseUrl}}/books
+Accept: application/json
+
+### Filtrar libros por categoría (1 = Novela)
+GET {{baseUrl}}/books?category=1
+Accept: application/json
+
+### Filtrar por categoría inexistente: 422
+GET {{baseUrl}}/books?category=999
+Accept: application/json
+
+### Ver un libro: 200
+GET {{baseUrl}}/books/1
+Accept: application/json
+
+### Ver un libro inexistente: 404
+GET {{baseUrl}}/books/999
+Accept: application/json
+
+### Crear un libro: 201
+POST {{baseUrl}}/books
+Accept: application/json
+Content-Type: {{contentType}}
+
+{
+  "title": "El nombre del viento",
+  "author": "Patrick Rothfuss",
+  "description": "Primera parte de la crónica del asesino de reyes.",
+  "published_year": 2007,
+  "category_id": 1
+}
+
+### Actualizar un libro: 200
+PUT {{baseUrl}}/books/{{bookId}}
+Accept: application/json
+Content-Type: {{contentType}}
+
+{
+  "title": "El nombre del viento (edición revisada)",
+  "author": "Patrick Rothfuss",
+  "description": "Actualizado.",
+  "published_year": 2007,
+  "category_id": 2
+}
+
+### Actualizar sin categoría: 422 (PUT es reemplazo completo)
+PUT {{baseUrl}}/books/{{bookId}}
+Accept: application/json
+Content-Type: {{contentType}}
+
+{
+  "title": "El nombre del viento (sin categoría)",
+  "author": "Patrick Rothfuss",
+  "published_year": 2007
+}
+
+### Crear un libro inválido: 422
+POST {{baseUrl}}/books
+Accept: application/json
+Content-Type: {{contentType}}
+
+{
+  "title": "AB",
+  "author": "",
+  "published_year": 3000,
+  "category_id": 999
+}
+
+### Eliminar un libro: 204
+DELETE {{baseUrl}}/books/{{bookId}}
+Accept: application/json
+
+### Listar categorías
+GET {{baseUrl}}/categories
+Accept: application/json
+
+### Crear una categoría: 201
+POST {{baseUrl}}/categories
+Accept: application/json
+Content-Type: {{contentType}}
+
+{
+  "name": "Poesía"
+}
+
+### Crear una categoría duplicada: 422
+POST {{baseUrl}}/categories
+Accept: application/json
+Content-Type: {{contentType}}
+
+{
+  "name": "Novela"
+}
+
+### Eliminar una categoría sin libros: 204
+# El id depende de las categorías creadas; ajustar si es necesario.
+DELETE {{baseUrl}}/categories/6
+Accept: application/json
+
+### Eliminar una categoría con libros: 409
+DELETE {{baseUrl}}/categories/1
+Accept: application/json

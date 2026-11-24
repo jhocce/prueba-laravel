@@ -1,0 +1,38 @@
+*.log
+.DS_Store
+
+# .env se versiona intencionalmente en este proyecto de evaluacion.
+# Solo contiene valores de desarrollo. Ver README.md, seccion "Entorno versionado".
+.env.backup
+.env.production
+.env.local
+/docker-compose.override.yml
+
+.phpactor.json
+.phpunit.result.cache
+/.codex
+/.cursor/
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/bootstrap/cache/*.php
+/database/*.sqlite
+/node_modules
+/public/build
+/public/fonts-manifest.dev.json
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+_ide_helper.php
+Homestead.json
+Homestead.yaml
+Thumbs.db
+
+# Guias generadas por el scaffold de Laravel Boost; no forman parte de la entrega.
+/AGENTS.md
+/CLAUDE.md
